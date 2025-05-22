@@ -37,6 +37,39 @@ def plot_description(characteristic : pd.Series, outputname: str):
     plt.show()
     # plt.savefig(outputname)
 
+def plot_description_values_table(df : pd.DataFrame, outputname: str):
+    df_formatted = df.copy()
+    df_formatted = df_formatted.applymap(lambda x: f"{x:.5f}" if isinstance(x, float) else x)
+
+    fig, ax = plt.subplots(figsize=(15, 5))
+    ax.axis('tight')
+    ax.axis('off')
+    ax.set_title("Heart Disease Dataset Description", fontsize=14, weight='bold')
+
+    # Create the table
+    table = ax.table(cellText=df_formatted.values,
+                    colLabels=df_formatted.columns,
+                    cellLoc='center',
+                    loc='center')
+
+    # Styling
+    table.auto_set_font_size(False)
+    table.set_fontsize(12)
+    table.scale(1.25, 1.75)
+
+    # Color headers
+    for (row, col), cell in table.get_celld().items():
+        if row == 0:
+            cell.set_text_props(weight='bold', color='white')
+            cell.set_facecolor('#4d004d')
+        elif row % 2 == 0:
+            cell.set_facecolor('#f1f1f2')  # Light gray row
+        else:
+            cell.set_facecolor('#ffffff')  # White row
+
+    plt.tight_layout()
+    plt.show()
+    # plt.savefig(outputname)
 
 def main():
     filename = sys.argv[1]
@@ -56,12 +89,19 @@ def main():
     dataset = pd.read_csv(filename)
 
     continue_values = [col for col in dataset if dictLabled[col]==labelsDict.CONTINUE]
+    print(f"Continue values: {continue_values}")
     discrete_values = [col for col in dataset if dictLabled[col]==labelsDict.DISCRETE]
+    print(f"Discrete values: {discrete_values}")
+
 
     # Save description for continue features
-    dataset[continue_values].describe().T.reset_index().to_csv(description_csv, index = False)
-
+    df = dataset[continue_values].describe().T.reset_index()
+    df.to_csv(description_csv, index = False)
     # Save description for discrete features
+    print(dataset[discrete_values].count().T.reset_index())
+
+    for value in discrete_values:
+        print(f"Unique values for {value}: {dataset[value].unique()}")
 
    
 
