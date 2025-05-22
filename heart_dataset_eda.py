@@ -21,10 +21,10 @@ def solve_first_eda_heart():
     else:
         dataset = pd.read_csv(os.path.join(os.getcwd(), 'datasets', 'heart_combined.csv'))
 
-    continue_values = [col for col in dataset if HeartDisease[col]==CONTINUE]
+    continuous_values = [col for col in dataset if HeartDisease[col]==CONTINUE]
     discrete_values = [col for col in dataset if HeartDisease[col]==DISCRETE]
 
-    plot_description_values_table(dataset[continue_values].describe().T.reset_index(), HEART_CONTINUE_VARS_TABLE, figsize=(14, 5))
+    plot_description_values_table(dataset[continuous_values].describe().T.reset_index(),title="Heart Disease Continuous Variables", outputname=HEART_CONTINUE_VARS_TABLE, figsize=(14, 5))
 
     df_discrete_vals = pd.DataFrame({
         'index': discrete_values,
@@ -33,7 +33,15 @@ def solve_first_eda_heart():
         'value_counts': [dataset[col].value_counts().to_dict() for col in discrete_values]
     })
 
-    plot_description_values_table(df_discrete_vals, HEART_DISCRETE_VARS_TABLE, figsize=(14, 5))
+    plot_description_values_table(df_discrete_vals, title="Heart Disease Discrete Variables", outputname=HEART_DISCRETE_VARS_TABLE, figsize=(14, 5), log_scale=True)
 
-    plot_boxplot_value_range(dataset[continue_values], HEART_CONTINUE_VARS_BOXPLOT, figsize=(10, 9), log_scale=True)
+    plot_boxplot_value_range(dataset[continuous_values], HEART_CONTINUE_VARS_BOXPLOT, figsize=(14, 10), log_scale=True)
 
+    for value in discrete_values:
+        plt.figure(figsize=(5, 5))
+        dataset[value].hist(width=0.1, color='skyblue', edgecolor='black')
+        plt.xlabel(value, fontsize=12)
+        plt.ylabel('Frequency', fontsize=12)
+        plt.xticks(rotation=45, fontsize=10)
+        plt.tight_layout()
+        plt.savefig(HEART_DISCRETE_VARS_BOXPLOT.replace('.png', f'_{value}.png'), bbox_inches='tight', dpi=300)

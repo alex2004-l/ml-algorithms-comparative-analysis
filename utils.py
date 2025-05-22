@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from pandas.plotting import table
 
-def plot_boxplot_value_range(dataset: pd.DataFrame, outputname: str = None, figsize: tuple = (10, 6), log_scale: bool = False):
+def plot_boxplot_value_range(dataset: pd.DataFrame, title:str=None, outputname: str = None, figsize: tuple = (10, 6), log_scale: bool = False):
     plt.figure(figsize=figsize)
 
     sns.set(style="whitegrid")
@@ -16,14 +16,14 @@ def plot_boxplot_value_range(dataset: pd.DataFrame, outputname: str = None, figs
 
     plt.xticks(rotation=45, fontsize=10)
     plt.yticks(fontsize=10)
-    plt.title(f"Continuous variables for {outputname}", fontsize=16, fontweight='bold')
+    plt.title(title, fontsize=16, fontweight='bold')
     plt.xlabel("")
     plt.ylabel("Value", fontsize=12)
     plt.grid(True, which='both', linestyle='--', linewidth=0.5)
 
     plt.tight_layout()
     if outputname:
-        plt.savefig(outputname, bbox_inches='tight', dpi=300)
+        plt.savefig(outputname, bbox_inches='tight', dpi=500)
     else:
         plt.show()
 
@@ -42,14 +42,14 @@ def plot_description(characteristic : pd.Series, outputname: str=None):
     else:
         plt.show()
 
-def plot_description_values_table(df : pd.DataFrame, outputname: str=None, figsize: tuple = (1, 1)):
+def plot_description_values_table(df : pd.DataFrame, title:str=None, outputname: str=None, figsize: tuple = (1, 1)):
     df_formatted = df.copy()
     df_formatted = df_formatted.applymap(lambda x: f"{x:.5f}" if isinstance(x, float) else x)
 
     _, ax = plt.subplots(figsize=figsize)
     ax.axis('tight')
     ax.axis('off')
-    ax.set_title("Heart Disease Dataset Description", fontsize=14, weight='bold')
+    ax.set_title(title if title else "Dataset Description", fontsize=14, weight='bold')
 
     table = ax.table(cellText=df_formatted.values,
                     colLabels=df_formatted.columns,
