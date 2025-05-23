@@ -2,6 +2,7 @@ UNLABELED = 'unlabeled'
 DISCRETE  = 'discrete'
 CONTINUE  = 'continue'
 ORDINAL   = 'ordinal'
+LABEL     = 'label'
 
 HeartDisease = {
     'blood_pressure_medication' : DISCRETE,
@@ -22,7 +23,7 @@ HeartDisease = {
     'sleep_heart_rate' : CONTINUE,
     'ldl_cholesterol' : CONTINUE,
     'high_blood_sugar' : DISCRETE,
-    'chd_risk' : DISCRETE
+    'chd_risk' : LABEL
 }
 
 Pirvision = {
@@ -31,15 +32,15 @@ Pirvision = {
     'Day' : UNLABELED,
     'Temp (F)' : CONTINUE,
     'Temp (C)' : CONTINUE,
-    'OBS_1' : CONTINUE,
-    'OBS_2' : CONTINUE,
-    'OBS_3' : CONTINUE,
-    'OBS_4' : CONTINUE,
-    'OBS_5' : CONTINUE,
-    'OBS_6' : CONTINUE,
-    'OBS_7' : CONTINUE,
-    'OBS_8' : CONTINUE,
-    'OBS_9' : CONTINUE,
+    'OBS_1'  : CONTINUE,
+    'OBS_2'  : CONTINUE,
+    'OBS_3'  : CONTINUE,
+    'OBS_4'  : CONTINUE,
+    'OBS_5'  : CONTINUE,
+    'OBS_6'  : CONTINUE,
+    'OBS_7'  : CONTINUE,
+    'OBS_8'  : CONTINUE,
+    'OBS_9'  : CONTINUE,
     'OBS_10' : CONTINUE,
     'OBS_11' : CONTINUE,
     'OBS_12' : CONTINUE,
@@ -88,5 +89,5 @@ Pirvision = {
     'OBS_55' : CONTINUE,
     'OBS_56' : CONTINUE,
     'OBS_57' : CONTINUE,
-    'Class' : DISCRETE
+    'Class'  : LABEL
 }

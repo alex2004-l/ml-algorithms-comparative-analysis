@@ -3,16 +3,16 @@ import pandas as pd
 from pandas.plotting import table
 import seaborn as sns
 import sys
-from heart_dataset_eda import solve_first_eda_heart
-from pirvision_dataset_eda import solve_first_eda_pirvision
+from heart_dataset_eda import heart_eda_statistics
+from pirvision_dataset_eda import pirvision_eda_statistics
 
 def main():
     index = sys.argv[1]
     
     if index == '0':
-        solve_first_eda_heart()
+        heart_eda_statistics()
     elif index == '1':
-        solve_first_eda_pirvision()
+        pirvision_eda_statistics()
 
 if __name__=='__main__':
     main()

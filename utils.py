@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from pandas.plotting import table
+import numpy as np
 
 def plot_boxplot_value_range(dataset: pd.DataFrame, title:str=None, outputname: str = None, figsize: tuple = (10, 6), log_scale: bool = False):
     plt.figure(figsize=figsize)
@@ -69,6 +70,45 @@ def plot_description_values_table(df : pd.DataFrame, title:str=None, outputname:
         else:
             cell.set_facecolor('#ffffff')
 
+    plt.tight_layout()
+    if outputname:
+        plt.savefig(outputname, bbox_inches='tight', dpi=300)
+    else:
+        plt.show()
+
+def plot_barplot_features(dataset: pd.DataFrame, values: list, outputname: str=None, figsize: tuple = (4, 4)):
+    for value in values:
+        plt.figure(figsize=figsize)
+        dataset[value].value_counts().sort_index().plot.bar(width=0.4, color=['skyblue', 'lightcoral'], edgecolor='black')
+        plt.xlabel(value, fontsize=12)
+        plt.xticks(rotation=45, fontsize=10)
+        plt.tight_layout()
+        if outputname:
+            plt.savefig(outputname.replace('.png', f'_{value}.png'), bbox_inches='tight', dpi=300)
+        else:
+            plt.show()
+
+def plot_correlation_matrix(correlation_matrix: pd.DataFrame, outputname:str = None, figsize:tuple=(10, 10)):
+    fig, ax = plt.subplots(figsize=figsize)
+    cax = ax.matshow(correlation_matrix, vmin=-1, vmax=1, cmap='coolwarm')
+    fig.colorbar(cax, fraction=0.05, pad=0.04)
+
+    ticks = np.arange(0, len(correlation_matrix.columns), 1)
+    ax.set_xticks(ticks)
+    ax.set_xticklabels(correlation_matrix.columns, rotation=90)
+    ax.set_yticks(ticks)
+    ax.set_yticklabels(correlation_matrix.columns)
+    plt.tight_layout()
+    if outputname:
+        plt.savefig(outputname, bbox_inches='tight', dpi=300)
+    else:
+        plt.show()
+
+def plot_chi_pvals_matrix(results_df: pd.DataFrame, outputname:str, figsize: tuple = (10, 8), value: str = None):
+    pivot = results_df.pivot(index='Var1', columns='Var2', values=value)
+    plt.figure(figsize=figsize)
+    sns.heatmap(pivot, annot=True, cmap='coolwarm', center=0.05, cbar_kws={'label': value})
+    plt.title("Chi-Squared Test")
     plt.tight_layout()
     if outputname:
         plt.savefig(outputname, bbox_inches='tight', dpi=300)
