@@ -33,15 +33,14 @@ def solve_first_eda_heart():
         'value_counts': [dataset[col].value_counts().to_dict() for col in discrete_values]
     })
 
-    plot_description_values_table(df_discrete_vals, title="Heart Disease Discrete Variables", outputname=HEART_DISCRETE_VARS_TABLE, figsize=(14, 5), log_scale=True)
+    plot_description_values_table(df_discrete_vals, title="Heart Disease Discrete Variables", outputname=HEART_DISCRETE_VARS_TABLE, figsize=(14, 5))
 
-    plot_boxplot_value_range(dataset[continuous_values], HEART_CONTINUE_VARS_BOXPLOT, figsize=(14, 10), log_scale=True)
+    plot_boxplot_value_range(dataset[continuous_values], title="Heart Disease Boxplot", outputname=HEART_CONTINUE_VARS_BOXPLOT, figsize=(14, 10), log_scale=True)
 
     for value in discrete_values:
-        plt.figure(figsize=(5, 5))
-        dataset[value].hist(width=0.1, color='skyblue', edgecolor='black')
+        plt.figure(figsize=(4, 4))
+        dataset[value].value_counts().sort_index().plot.bar(width=0.3, color=['skyblue', 'lightcoral', 'forestgreen', 'magenta'], edgecolor='black')
         plt.xlabel(value, fontsize=12)
-        plt.ylabel('Frequency', fontsize=12)
         plt.xticks(rotation=45, fontsize=10)
         plt.tight_layout()
         plt.savefig(HEART_DISCRETE_VARS_BOXPLOT.replace('.png', f'_{value}.png'), bbox_inches='tight', dpi=300)
