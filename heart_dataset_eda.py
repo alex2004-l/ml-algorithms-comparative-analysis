@@ -17,7 +17,7 @@ HEART_DISCRETE_VARS_BARPLOT = 'plots/barplot_discrete_heart.png'
 HEART_LABEL_VARS_BARPLOT    = 'plots/barplot_label_heart.png'
 HEART_CORRELATION_MATRIX_CONTINUOUS    = 'correlation/heart_correlation_continuous.png'
 HEART_CORRELATION_MATRIX_DISCRETE      = 'correlation/heart_correlation_discrete.png'
-HEART_CHI_SQUARE_RESULTS    = 'chi_square_results_heart.png'
+HEART_CHI_SQUARE_RESULTS               = 'correlation/chi_square_results_heart.png'
 
 def heart_eda_statistics():
     if not os.path.exists(os.path.join(os.getcwd(), 'datasets', 'heart_combined.csv')):

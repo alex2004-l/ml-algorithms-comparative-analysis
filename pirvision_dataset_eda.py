@@ -42,7 +42,7 @@ def __get_eda_feature_statistics(dataset: pd.DataFrame):
         'value_counts': [dataset[col].value_counts().to_dict() for col in discrete_values]
     })
 
-    plot_description_values_table(df_discrete_vals, title="Pirvision Discrete Variables", outputname=PIRVISION_DISCRETE_VARS_TABLE, figsize=(14, 2))
+    plot_description_values_table(df_discrete_vals, title="Pirvision Discrete Variables", outputname=PIRVISION_DISCRETE_VARS_TABLE, figsize=(12, 1.5))
     plot_description_values_table(dataset[continuous_values].describe().T.reset_index(),title="Pirvision Continuous Variables", outputname=PIRVISION_CONTINUE_VARS_TABLE, figsize=(15, 24))
 
     # Boxplot only for OBS_1
