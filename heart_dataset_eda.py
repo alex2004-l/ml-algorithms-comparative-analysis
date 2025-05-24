@@ -1,5 +1,6 @@
 from labelsDict import CONTINUE, DISCRETE, LABEL, HeartDisease
-from utils import plot_boxplot_value_range, plot_description_values_table, plot_barplot_features, plot_correlation_matrix, plot_chi_pvals_matrix
+from utils import plot_boxplot_value_range, plot_description_values_table, plot_barplot_features
+from utils import plot_correlation_matrix, plot_chi_pvals_matrix, chi_square_all_pairs
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -14,7 +15,9 @@ HEART_DISCRETE_VARS_TABLE   = 'tables/heart_discrete.png'
 HEART_CONTINUE_VARS_BOXPLOT = 'plots/boxplot_continuous_heart.png'
 HEART_DISCRETE_VARS_BARPLOT = 'plots/barplot_discrete_heart.png'
 HEART_LABEL_VARS_BARPLOT    = 'plots/barplot_label_heart.png'
-HEART_CORRELATION_MATRIX    = 'correlation/heart_correlation.png'
+HEART_CORRELATION_MATRIX_CONTINUOUS    = 'correlation/heart_correlation_continuous.png'
+HEART_CORRELATION_MATRIX_DISCRETE      = 'correlation/heart_correlation_discrete.png'
+HEART_CHI_SQUARE_RESULTS    = 'chi_square_results_heart.png'
 
 def heart_eda_statistics():
     if not os.path.exists(os.path.join(os.getcwd(), 'datasets', 'heart_combined.csv')):
@@ -59,27 +62,12 @@ def __get_eda_label_statistics(dataset: pd.DataFrame):
 
 
 def __get_eda_correlation_statistics(dataset: pd.DataFrame):
-    columns = [col for col in dataset if HeartDisease[col] in [CONTINUE, DISCRETE]]
-    correlation_matrix = dataset[columns].corr(method='pearson')
-
-    plot_correlation_matrix(correlation_matrix, HEART_CORRELATION_MATRIX)
-    df = chi_square_all_pairs(dataset, [col for col in dataset if HeartDisease[col] in [DISCRETE]], alpha=0.05)
-    plot_chi_pvals_matrix(df, outputname='chi_square_results_heart1.png', figsize=(10, 8), value='p-value')
-    plot_chi_pvals_matrix(df, outputname='chi_square_results_heart2.png', figsize=(10, 8), value='Independent?')
+    columns_continuous = [col for col in dataset if HeartDisease[col] in [CONTINUE]]
+    correlation_matrix_continuous = dataset[columns_continuous].corr(method='pearson')
+    plot_correlation_matrix(correlation_matrix_continuous, HEART_CORRELATION_MATRIX_CONTINUOUS)
+    columns_discrete = [col for col in dataset if HeartDisease[col] in [DISCRETE]]
+    correlation_matrix_discrete = dataset[columns_discrete].corr(method='pearson')
+    plot_correlation_matrix(correlation_matrix_discrete, HEART_CORRELATION_MATRIX_DISCRETE)
+    df = chi_square_all_pairs(dataset, columns_discrete, alpha=0.05)
+    plot_chi_pvals_matrix(df, outputname=HEART_CHI_SQUARE_RESULTS, figsize=(10, 8), value='p-value')
     plt.close()
-
-def chi_square_all_pairs(df, categorical_cols, alpha=0.05):
-    results = []
-    for col1, col2 in itertools.permutations(categorical_cols, 2):
-        contingency = pd.crosstab(df[col1], df[col2])
-        chi2, p, dof, expected = chi2_contingency(contingency)
-        result = {
-            'Var1': col1,
-            'Var2': col2,
-            'Chi2': round(chi2, 4),
-            'p-value': round(p, 4),
-            'dof': dof,
-            'Independent?': 1 if p > alpha else 0
-        }
-        results.append(result)
-    return pd.DataFrame(results)

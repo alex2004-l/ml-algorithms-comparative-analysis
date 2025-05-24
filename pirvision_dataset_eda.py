@@ -1,5 +1,6 @@
 from labelsDict import CONTINUE, DISCRETE, LABEL, UNLABELED, Pirvision
 from utils import plot_boxplot_value_range, plot_description_values_table, plot_barplot_features, plot_correlation_matrix
+from utils import plot_chi_pvals_matrix, chi_square_all_pairs
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -14,6 +15,7 @@ PIRVISION_CONTINUE_VARS_BOXPLOT = 'plots/boxplot_continuous_pirvision.png'
 PIRVISION_DISCRETE_VARS_BARPLOT = 'plots/barplot_discrete_pirvision.png'
 PIRVISION_LABEL_VARS_BARPLOT    = 'plots/barplot_label_pirvision.png'
 PIRVISION_CORRELATION_MATRIX    = 'correlation/pirvision_correlation.png'
+PIRVISION_CHI_SQUARE_RESULTS    = 'correlation/chi_square_results_pirvision.png'
 
 def pirvision_eda_statistics():
     if not os.path.exists(os.path.join(os.getcwd(), 'datasets', 'pirvision_combined.csv')):
@@ -72,7 +74,8 @@ def __get_eda_label_statistics(dataset: pd.DataFrame):
     plot_barplot_features(dataset, label_vals, PIRVISION_LABEL_VARS_BARPLOT)
 
 def __get_eda_correlation_statistics(dataset: pd.DataFrame):
-    columns = [col for col in dataset if not Pirvision[col]==UNLABELED and not Pirvision[col]==LABEL]
+    columns = [col for col in dataset if not Pirvision[col] in [UNLABELED, LABEL]]
     correlation_matrix = dataset[columns].corr(method='pearson')
 
     plot_correlation_matrix(correlation_matrix, PIRVISION_CORRELATION_MATRIX, figsize=(25, 25))
+    plt.close()

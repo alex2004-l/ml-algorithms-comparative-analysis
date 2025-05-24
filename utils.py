@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from pandas.plotting import table
 import numpy as np
+import itertools
+from scipy.stats import chi2_contingency
 
 def plot_boxplot_value_range(dataset: pd.DataFrame, title:str=None, outputname: str = None, figsize: tuple = (10, 6), log_scale: bool = False):
     plt.figure(figsize=figsize)
@@ -24,7 +26,7 @@ def plot_boxplot_value_range(dataset: pd.DataFrame, title:str=None, outputname: 
 
     plt.tight_layout()
     if outputname:
-        plt.savefig(outputname, bbox_inches='tight', dpi=500)
+        plt.savefig(outputname, bbox_inches='tight', dpi=100)
     else:
         plt.show()
 
@@ -72,7 +74,7 @@ def plot_description_values_table(df : pd.DataFrame, title:str=None, outputname:
 
     plt.tight_layout()
     if outputname:
-        plt.savefig(outputname, bbox_inches='tight', dpi=300)
+        plt.savefig(outputname, bbox_inches='tight', dpi=100)
     else:
         plt.show()
 
@@ -84,7 +86,7 @@ def plot_barplot_features(dataset: pd.DataFrame, values: list, outputname: str=N
         plt.xticks(rotation=45, fontsize=10)
         plt.tight_layout()
         if outputname:
-            plt.savefig(outputname.replace('.png', f'_{value}.png'), bbox_inches='tight', dpi=300)
+            plt.savefig(outputname.replace('.png', f'_{value}.png'), bbox_inches='tight', dpi=100)
         else:
             plt.show()
 
@@ -100,7 +102,7 @@ def plot_correlation_matrix(correlation_matrix: pd.DataFrame, outputname:str = N
     ax.set_yticklabels(correlation_matrix.columns)
     plt.tight_layout()
     if outputname:
-        plt.savefig(outputname, bbox_inches='tight', dpi=300)
+        plt.savefig(outputname, bbox_inches='tight', dpi=100)
     else:
         plt.show()
 
@@ -111,6 +113,22 @@ def plot_chi_pvals_matrix(results_df: pd.DataFrame, outputname:str, figsize: tup
     plt.title("Chi-Squared Test")
     plt.tight_layout()
     if outputname:
-        plt.savefig(outputname, bbox_inches='tight', dpi=300)
+        plt.savefig(outputname, bbox_inches='tight', dpi=100)
     else:
         plt.show()
+
+def chi_square_all_pairs(df, categorical_cols, alpha=0.05):
+    results = []
+    for col1, col2 in itertools.permutations(categorical_cols, 2):
+        contingency = pd.crosstab(df[col1], df[col2])
+        chi2, p, dof, expected = chi2_contingency(contingency)
+        result = {
+            'Var1': col1,
+            'Var2': col2,
+            'Chi2': round(chi2, 4),
+            'p-value': round(p, 4),
+            'dof': dof,
+            'Independent?': 1 if p > alpha else 0
+        }
+        results.append(result)
+    return pd.DataFrame(results)
