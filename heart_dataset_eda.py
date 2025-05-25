@@ -65,9 +65,11 @@ def __get_eda_correlation_statistics(dataset: pd.DataFrame):
     columns_continuous = [col for col in dataset if HeartDisease[col] in [CONTINUE]]
     correlation_matrix_continuous = dataset[columns_continuous].corr(method='pearson')
     plot_correlation_matrix(correlation_matrix_continuous, HEART_CORRELATION_MATRIX_CONTINUOUS)
+
     columns_discrete = [col for col in dataset if HeartDisease[col] in [DISCRETE]]
     correlation_matrix_discrete = dataset[columns_discrete].corr(method='pearson')
     plot_correlation_matrix(correlation_matrix_discrete, HEART_CORRELATION_MATRIX_DISCRETE)
+
     df = chi_square_all_pairs(dataset, columns_discrete, alpha=0.05)
     plot_chi_pvals_matrix(df, outputname=HEART_CHI_SQUARE_RESULTS, figsize=(10, 8), value='p-value')
     plt.close()

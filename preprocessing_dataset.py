@@ -51,6 +51,7 @@ def preprocessing(dictionary:dict, train_path:str, test_path:str, imputation:str
 
     numeric_cols = [cols for cols in df_train.columns if dictionary[cols] in [DISCRETE, CONTINUE]]
 
+
     if scaler_type == 'standard':
         scaler = StandardScaler()
     elif scaler_type == 'minmax':
