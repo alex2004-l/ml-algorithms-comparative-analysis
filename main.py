@@ -13,6 +13,7 @@ from sklearn.metrics import classification_report, accuracy_score
 from sklearn.utils.class_weight import compute_class_weight
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
+from sklearn.linear_model import LogisticRegression
 
 
 HEART_DATASET_PATH_TRAIN        = 'datasets/heart_4_train.csv'
@@ -76,6 +77,51 @@ def mlp_classifier(X_train, X_test, y_train):
     y_pred = mlp.predict(X_test)
     return y_pred
 
+def logistic(x):
+    return 1 / (1 + np.exp(-x))
+
+def nll(Y, T):
+    N = T.shape[0]
+    return -1/N * np.sum(T * np.log(Y) + (1-T) * np.log(1 - Y))
+
+def predict_logistic(X, w):
+    if isinstance(X, pd.DataFrame):
+        X = X.to_numpy()
+    return logistic(X @ w)
+
+def accuracy(Y, T):
+    Y = np.array(Y).flatten()
+    T = np.array(T).flatten()
+    return np.mean((Y >= 0.5) == T)
+
+def train_and_eval_logistic(X_train: pd.DataFrame, T_train: pd.Series,
+                            X_test: pd.DataFrame, T_test: pd.Series,
+                            lr=0.01, epochs_no=100):
+    X_train = X_train.to_numpy()
+    X_test = X_test.to_numpy()
+    T_train = T_train.to_numpy().flatten()
+    T_test = T_test.to_numpy().flatten()
+
+    N_train, D = X_train.shape
+    w = np.random.randn(D)
+
+    train_acc, test_acc = [], []
+    train_nll, test_nll = [], []
+
+    for epoch in range(epochs_no):
+        Y_train = predict_logistic(X_train, w)
+        Y_test = predict_logistic(X_test, w)
+
+        train_acc.append(accuracy(Y_train, T_train))
+        test_acc.append(accuracy(Y_test, T_test))
+        train_nll.append(nll(Y_train, T_train))
+        test_nll.append(nll(Y_test, T_test))
+
+        grad = (1 / N_train) * X_train.T @ (Y_train - T_train)
+        w = w - lr * grad
+
+    return w, train_nll, test_nll, train_acc, test_acc
+
 
 def main():
     index = sys.argv[1]
@@ -105,6 +151,23 @@ def main():
 
     y_pred = mlp_classifier(X_train, X_test, y_train)
 
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+
+    w, train_nll, test_nll, train_acc, test_acc = train_and_eval_logistic(X_train, y_train, X_test, y_test, lr=0.1, epochs_no=10000)
+
+    y_pred_probs = predict_logistic(X_test, w)
+    y_pred = (y_pred_probs >= 0.5).astype(int)
+
+    print("Predicted labels:", np.unique(y_pred, return_counts=True))
+
+    print("Accuracy:",accuracy_score(y_pred, y_test))
+    print(classification_report(y_test, y_pred))
+
+    clf = LogisticRegression()
+    clf.fit(X_train, y_train)
+
+    y_pred = clf.predict(X_test)
     print("Accuracy:", accuracy_score(y_test, y_pred))
     print(classification_report(y_test, y_pred))
 
