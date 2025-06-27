@@ -90,6 +90,7 @@ def plot_barplot_features(dataset: pd.DataFrame, values: list, outputname: str=N
         else:
             plt.show()
 
+
 def plot_correlation_matrix(correlation_matrix: pd.DataFrame, outputname:str = None, figsize:tuple=(10, 10)):
     fig, ax = plt.subplots(figsize=figsize)
     cax = ax.matshow(correlation_matrix, vmin=-1, vmax=1, cmap='coolwarm')

@@ -13,13 +13,11 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 
-from labelsDict import HeartDisease, Pirvision
+from labelsDict import Pirvision
 from heart_dataset_eda import heart_eda_statistics
 from pirvision_dataset_eda import pirvision_eda_statistics
 from preprocessing_dataset import preprocessing
 
-HEART_DATASET_PATH_TRAIN        = 'datasets/heart_4_train.csv'
-HEART_DATASET_PATH_TEST         = 'datasets/heart_4_test.csv'
 PIRVISION_DATASET_PATH_TRAIN    = 'datasets/pirvision_office_train.csv'
 PIRVISION_DATASET_PATH_TEST     = 'datasets/pirvision_office_test.csv'
 
@@ -34,12 +32,15 @@ def get_report(name, report):
     
     row_data = {
         "accuracy": report["accuracy"],
-        "macro_precision": report["macro avg"]["precision"],
-        "macro_recall": report["macro avg"]["recall"],
-        "macro_f1": report["macro avg"]["f1-score"],
-        "weighted_precision": report["weighted avg"]["precision"],
-        "weighted_recall": report["weighted avg"]["recall"],
-        "weighted_f1": report["weighted avg"]["f1-score"],
+        "0_precision": report["0"]["precision"],
+        "0_recall": report["0"]["recall"],
+        "0_f1-score": report["0"]["f1-score"],
+        "1_precision": report["1"]["precision"],
+        "1_recall": report["1"]["recall"],
+        "1_f1-score": report["1"]["f1-score"],
+        "2_precision": report["2"]["precision"] if "2" in report else None,
+        "2_recall": report["2"]["recall"] if "2" in report else None,
+        "2_f1-score": report["2"]["f1-score"] if "2" in report else None,
     }
 
     return pd.DataFrame([row_data], index=[name])
@@ -61,7 +62,9 @@ def decision_tree_classifier(X_train, X_test, y_train, y_test):
     y_pred = clf.predict(X_test)
 
     print("Accuracy:", accuracy_score(y_test, y_pred))
-    # print(classification_report(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+
+    # print(get_report("decision_tree", classification_report(y_test, y_pred, output_dict=True)))
 
     # confusion = confusion_matrix(y_test, y_pred)
     # plot_confusion_matrix(confusion, "confusion/decision_tree_pirvision.png")
@@ -90,7 +93,7 @@ def random_forest_classifier(X_train, X_test, y_train, y_test):
     y_pred = rf_model.predict(X_test)
     
     print("Accuracy:", accuracy_score(y_test, y_pred))
-    # print(classification_report(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
 
     # confusion = confusion_matrix(y_test, y_pred)
     # plot_confusion_matrix(confusion, "confusion/random_forest_pirvision.png")
@@ -116,7 +119,7 @@ def mlp_classifier(X_train, X_test, y_train, y_test):
 
     y_pred = mlp.predict(X_test)
     print("Accuracy:", accuracy_score(y_test, y_pred))
-    # print(classification_report(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
 
     # confusion = confusion_matrix(y_test, y_pred)
     # plot_confusion_matrix(confusion, "confusion/mlp_pirvision.png")
@@ -152,7 +155,7 @@ def logistic_regression_classifier(X1, X2, y_train, y_test):
         y_pred = (y_pred_probs >= 0.5).astype(int)
 
     print("Accuracy:",accuracy_score(y_pred, y_test))
-    # print(classification_report(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
 
     report = classification_report(y_test, y_pred, output_dict=True)
 

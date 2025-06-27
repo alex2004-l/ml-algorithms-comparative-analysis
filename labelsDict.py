@@ -4,28 +4,6 @@ CONTINUE  = 'continue'
 ORDINAL   = 'ordinal'
 LABEL     = 'label'
 
-HeartDisease = {
-    'blood_pressure_medication' : DISCRETE,
-    'cholesterol_level': CONTINUE,
-    'stroke_history' : DISCRETE,
-    'systolic_pressure' : CONTINUE,
-    'hypertension_history' : DISCRETE,
-    'daily_cigarettes' : CONTINUE,
-    'diastolic_pressure' : CONTINUE,
-    'heart_rate' : CONTINUE,
-    'smoking_status' : DISCRETE,
-    'diabetes_history' : DISCRETE  ,
-    'mass_index' : CONTINUE,
-    'blood_sugar_level' : CONTINUE,
-    'age' : CONTINUE,
-    'education_level' : DISCRETE,
-    'gender' : DISCRETE,
-    'sleep_heart_rate' : CONTINUE,
-    'ldl_cholesterol' : CONTINUE,
-    'high_blood_sugar' : DISCRETE,
-    'chd_risk' : LABEL
-}
-
 Pirvision = {
     'Timestamp' : UNLABELED,
     'Day Index' : DISCRETE,
