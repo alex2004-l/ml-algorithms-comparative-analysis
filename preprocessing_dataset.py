@@ -8,8 +8,6 @@ from sklearn.impute import IterativeImputer
 
 
 def preprocessing(dictionary:dict, train_path:str, test_path:str, imputation:str='mean', quantile1:float=0.25, quantile3:float=0.75, scaler_type:str='standard', correlation_factor:float=0.9) -> tuple[pd.DataFrame, pd.DataFrame]:
-    df_train = pd.read_csv(train_path)
-    df_test = pd.read_csv(test_path)
     # Replacing outliers with Nan
     for col in df_train:
         if dictionary[col] != CONTINUE:
