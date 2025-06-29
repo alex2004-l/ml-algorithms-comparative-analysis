@@ -13,19 +13,8 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 
-from labelsDict import Pirvision
-from pirvision_dataset_eda import pirvision_eda_statistics
 from preprocessing_dataset import preprocessing
 
-PIRVISION_DATASET_PATH_TRAIN    = 'datasets/pirvision_office_train.csv'
-PIRVISION_DATASET_PATH_TEST     = 'datasets/pirvision_office_test.csv'
-
-def plot_confusion_matrix(cm, outputname = None):
-    disp = ConfusionMatrixDisplay(confusion_matrix=cm)
-    disp.plot(cmap='Reds')
-    if outputname:
-        plt.savefig(outputname, dpi = 100)
-    plt.show()
 
 def get_report(name, report):
     
