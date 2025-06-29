@@ -14,7 +14,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 
 from labelsDict import Pirvision
-from heart_dataset_eda import heart_eda_statistics
 from pirvision_dataset_eda import pirvision_eda_statistics
 from preprocessing_dataset import preprocessing
 
@@ -187,13 +186,11 @@ def main():
     ml_type = sys.argv[2]
     
     if index == '0':
-        # heart_eda_statistics()
         X_train, X_test, y_train, y_test = preprocessing(HeartDisease,
                                                           train_path=HEART_DATASET_PATH_TRAIN, test_path=HEART_DATASET_PATH_TEST,
                                                           imputation='most_frequent', quantile1=0.25, quantile3=0.75,
                                                           scaler_type='standard', correlation_factor=0.9)
     elif index == '1':
-        # pirvision_eda_statistics()
         X_train, X_test, y_train, y_test = preprocessing(Pirvision,
                                                          train_path=PIRVISION_DATASET_PATH_TRAIN, test_path=PIRVISION_DATASET_PATH_TEST,
                                                          imputation='median', quantile1=0.1, quantile3=0.9,
